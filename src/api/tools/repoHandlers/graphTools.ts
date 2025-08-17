@@ -114,7 +114,7 @@ export class GraphCreationService {
       const graphs = await client.list();
       return graphs.includes(graphName);
     } catch (error) {
-      console.error(`Error checking graph existence for ${graphName}:`, error);
+      console.error("Error checking graph existence for %s:", graphName, error);
       return false;
     }
   }
