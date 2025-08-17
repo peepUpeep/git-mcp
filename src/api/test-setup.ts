@@ -59,7 +59,8 @@ export async function handleR2TestSetup(
       const errorMessage =
         error instanceof Error ? error.message : String(error);
       console.error(
-        `Error uploading hardcoded content to ${file.bucketPath} in R2:`,
+        "Error uploading hardcoded content to %s in R2: %s",
+        file.bucketPath,
         errorMessage,
       );
       results.push(
