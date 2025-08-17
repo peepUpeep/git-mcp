@@ -51,7 +51,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
           window.localStorage.setItem(key, JSON.stringify(valueToStore));
         }
       } catch (error) {
-        console.error(`Error setting localStorage key "${key}":`, error);
+        console.error('Error setting localStorage key "%s":', key, error);
       }
     },
     [key, storedValue, isBrowser],
