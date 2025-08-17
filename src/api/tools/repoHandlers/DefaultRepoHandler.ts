@@ -126,7 +126,8 @@ class DefaultRepoHandler implements RepoHandler {
             if (graphExists) {
               // Graph exists - proceed with normal functionality with timeout
               console.log(
-                `Graph ${graphName} exists, proceeding with code examples search`,
+                'Graph %s exists, proceeding with code examples search',
+                graphName,
               );
 
               try {
@@ -264,15 +265,9 @@ class DefaultRepoHandler implements RepoHandler {
                               codeSnippet = `Function: ${name}\nFile: ${relativePath}:${line}\nCalls: ${functionName}\n\n(Code content temporarily unavailable)`;
                             }
 
-                            return `## Code Example ${index + 1}: ${name}
-
-                            File: ${relativePath}:${line}
-                            Calls: ${functionName}
-
-                            \`\`\`
-                            ${codeSnippet}
-                            \`\`\`
-                            `;
+                            return `## Code Example ${index + 1}: ${name}\n
+                            File: ${relativePath}:${line}\n                            Calls: ${functionName}\n
+                            \`\`\`\n                            ${codeSnippet}\n                            \`\`\`\n                            `;
                           },
                         ),
                       );
@@ -300,7 +295,7 @@ class DefaultRepoHandler implements RepoHandler {
 
                 return result;
               } catch (error) {
-                console.error(`Graph query failed for ${functionName}:`, error);
+                console.error('Graph query failed for %s:', functionName, error);
                 return {
                   content: [
                     {
@@ -312,9 +307,7 @@ class DefaultRepoHandler implements RepoHandler {
               }
             } else {
               // Phase 2: Graph doesn't exist - check creation status and provide immediate feedback
-              console.log(
-                `Graph ${graphName} not found. Checking creation status...`,
-              );
+              console.log('Graph %s not found. Checking creation status...', graphName);
 
               // FIRST: Force clear any stale locks (older than 20 minutes) to prevent stuck states
               graphService.clearStaleLocks(repoKey);
@@ -322,9 +315,7 @@ class DefaultRepoHandler implements RepoHandler {
               // SECOND: If locks are older than 5 minutes, force clear them to allow fresh requests
               const progress = graphService.getCreationProgress(repoKey);
               if (progress.inProgress && progress.elapsedMinutes >= 5) {
-                console.log(
-                  `[Debug] Forcing cleanup of ${repoKey} creation locks after ${progress.elapsedMinutes} minutes`,
-                );
+                console.log('[Debug] Forcing cleanup of %s creation locks after %d minutes', repoKey, progress.elapsedMinutes);
                 graphService.setCreationLock(repoKey, false);
                 // Force clear all related locks
                 const registry = getGlobalCreationRegistry();
@@ -333,16 +324,11 @@ class DefaultRepoHandler implements RepoHandler {
 
               // THEN: Check if creation is actually in progress (after clearing stale locks)
               const finalProgress = graphService.getCreationProgress(repoKey);
-              console.log(
-                `[Debug] Progress check for ${repoKey} after clearing stale locks:`,
-                finalProgress,
-              );
+              console.log('[Debug] Progress check for %s after clearing stale locks:', repoKey, finalProgress);
 
               if (finalProgress.inProgress) {
                 // Creation is genuinely in progress - show progress and ask to wait
-                console.log(
-                  `[Debug] Creation in progress for ${repoKey}, showing progress`,
-                );
+                console.log('[Debug] Creation in progress for %s, showing progress', repoKey);
                 return {
                   content: [
                     {
@@ -353,9 +339,7 @@ class DefaultRepoHandler implements RepoHandler {
                 };
               } else {
                 // No creation in progress - start it now and return immediate response
-                console.log(
-                  `Starting graph creation for ${repoKey} in background...`,
-                );
+                console.log('Starting graph creation for %s in background...', repoKey);
 
                 // Set creation lock immediately
                 graphService.setCreationLock(repoKey, true);
@@ -373,7 +357,7 @@ class DefaultRepoHandler implements RepoHandler {
                   ignore: config.ignorePatterns,
                 };
 
-                console.log(`[Immediate] Making API request to ${apiUrl}`);
+                console.log("[Immediate] Making API request to %s", apiUrl);
                 console.log(
                   `[Immediate] Request body:`,
                   JSON.stringify(requestBody),
@@ -392,26 +376,16 @@ class DefaultRepoHandler implements RepoHandler {
                   })
                     .then((response) => {
                       if (response.ok) {
-                        console.log(
-                          `[Immediate] API request successful for ${repoKey}`,
-                        );
+                        console.log('[Immediate] API request successful for %s', repoKey);
                       } else {
-                        console.error(
-                          `[Immediate] API request failed: ${response.status} ${response.statusText}`,
-                        );
+                        console.error('[Immediate] API request failed: %s %s', response.status, response.statusText);
                       }
                     })
                     .catch((error) => {
-                      console.error(
-                        `[Immediate] API request error for ${repoKey}:`,
-                        error,
-                      );
+                      console.error('[Immediate] API request error for %s:', repoKey, error);
                     });
                 } catch (error) {
-                  console.error(
-                    `[Immediate] Failed to initiate API request:`,
-                    error,
-                  );
+                  console.error('[Immediate] Failed to initiate API request:', error);
                 }
 
                 return {
