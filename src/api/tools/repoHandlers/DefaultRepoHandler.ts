@@ -264,15 +264,9 @@ class DefaultRepoHandler implements RepoHandler {
                               codeSnippet = `Function: ${name}\nFile: ${relativePath}:${line}\nCalls: ${functionName}\n\n(Code content temporarily unavailable)`;
                             }
 
-                            return `## Code Example ${index + 1}: ${name}
-
-                            File: ${relativePath}:${line}
-                            Calls: ${functionName}
-
-                            \`\`\`
-                            ${codeSnippet}
-                            \`\`\`
-                            `;
+                            return `## Code Example ${index + 1}: ${name}\n
+                            File: ${relativePath}:${line}\n                            Calls: ${functionName}\n
+                            \`\`\`\n                            ${codeSnippet}\n                            \`\`\`\n                            `;
                           },
                         ),
                       );
@@ -300,7 +294,7 @@ class DefaultRepoHandler implements RepoHandler {
 
                 return result;
               } catch (error) {
-                console.error(`Graph query failed for ${functionName}:`, error);
+                console.error("Graph query failed for %s:", functionName, error);
                 return {
                   content: [
                     {
@@ -333,10 +327,7 @@ class DefaultRepoHandler implements RepoHandler {
 
               // THEN: Check if creation is actually in progress (after clearing stale locks)
               const finalProgress = graphService.getCreationProgress(repoKey);
-              console.log(
-                `[Debug] Progress check for ${repoKey} after clearing stale locks:`,
-                finalProgress,
-              );
+              console.log('[Debug] Progress check for %s after clearing stale locks:', repoKey, finalProgress);
 
               if (finalProgress.inProgress) {
                 // Creation is genuinely in progress - show progress and ask to wait
