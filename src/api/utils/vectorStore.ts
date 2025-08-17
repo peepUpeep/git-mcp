@@ -740,7 +740,7 @@ export async function storeDocumentationVectors(
 
     return vectors.length;
   } catch (error) {
-    console.error(`Error storing vectors for ${owner}/${repo}:`, error);
+    console.error("Error storing vectors for %s/%s:", owner, repo, error);
     throw error;
   }
 }
