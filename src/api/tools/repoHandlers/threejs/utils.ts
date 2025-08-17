@@ -242,7 +242,7 @@ export async function fetchThreeJsUrlsAsMarkdown(
             .pop()
             ?.replace(".html", "");
         } catch (e) {
-          console.error(`Error getting document name from url ${url}`, e);
+          console.error("Error getting document name from url %s", url, e);
         }
       }
       const text = await fetchUrlContent({
