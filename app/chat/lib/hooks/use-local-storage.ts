@@ -26,7 +26,7 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
         setStoredValue(parseJSON(item));
       }
     } catch (error) {
-      console.error(`Error reading localStorage key "${key}":`, error);
+      console.error('Error reading localStorage key "%s":', key, error);
     }
   }, [key, isBrowser]);
 
