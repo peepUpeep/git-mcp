@@ -264,15 +264,7 @@ class DefaultRepoHandler implements RepoHandler {
                               codeSnippet = `Function: ${name}\nFile: ${relativePath}:${line}\nCalls: ${functionName}\n\n(Code content temporarily unavailable)`;
                             }
 
-                            return `## Code Example ${index + 1}: ${name}
-
-                            File: ${relativePath}:${line}
-                            Calls: ${functionName}
-
-                            \`\`\`
-                            ${codeSnippet}
-                            \`\`\`
-                            `;
+                            return `## Code Example ${index + 1}: ${name}\n\n                            File: ${relativePath}:${line}\n                            Calls: ${functionName}\n\n                            \`\`\`\n                            ${codeSnippet}\n                            \`\`\`\n                            `;
                           },
                         ),
                       );
@@ -300,7 +292,7 @@ class DefaultRepoHandler implements RepoHandler {
 
                 return result;
               } catch (error) {
-                console.error(`Graph query failed for ${functionName}:`, error);
+                console.error("Graph query failed for %s:", functionName, error);
                 return {
                   content: [
                     {
