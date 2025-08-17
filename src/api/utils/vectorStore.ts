@@ -918,7 +918,7 @@ export async function searchDocumentation(
       score: result.combinedScore,
     }));
   } catch (error) {
-    console.error(`Error searching documentation for ${owner}/${repo}:`, error);
+    console.error("Error searching documentation for %s/%s:", owner, repo, error);
     return [];
   }
 }
